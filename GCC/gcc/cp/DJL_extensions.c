@@ -458,7 +458,6 @@ static void DJL_xml_output_constructor(xml_dump_info_p xdi, tree t, int indent_l
 
   DJL_xml_indent(xdi, indent_level++);
   fprintf(xdi->file, "<%s:%s type=\"%s\">\n", DJL_xml_ns, tag_name, type);
-  DJL_xml_output_tree_chain(xdi, TREE_OPERAND(t, 1), indent_level, "Constructor_Element", "Purpose", "Value");
   DJL_xml_close_tag(xdi, --indent_level, tag_name);
 }
 
