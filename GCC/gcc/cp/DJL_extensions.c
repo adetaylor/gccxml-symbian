@@ -1551,15 +1551,15 @@ static void DJL_xml_output_case_label_expr(xml_dump_info_p xdi, tree t, int inde
   char *tag_name = "Case_Label_Expr";
   if(CASE_LOW(t)==NULL_TREE){
     DJL_xml_indent(xdi, indent_level);
-    fprintf(xdi->file, "<%s:%s default=\"1\" />\n", DJL_xml_ns, tag_name); 
+    fprintf(xdi->file, "<%s:%s default=\"1\">\n", DJL_xml_ns, tag_name); 
   }else{
     DJL_xml_open_tag(xdi, indent_level++, tag_name);
     DJL_xml_output_expression(xdi, CASE_LOW(t), indent_level);
     if(CASE_HIGH(t)!= NULL_TREE) //This is used in case this spans multiple 
       DJL_xml_output_expression(xdi, CASE_HIGH(t), indent_level);
-    DJL_xml_output_expression(xdi, CASE_LABEL(t), indent_level);
-    DJL_xml_close_tag(xdi, --indent_level, tag_name);
-  }  
+  }
+  DJL_xml_output_expression(xdi, CASE_LABEL(t), indent_level);
+  DJL_xml_close_tag(xdi, --indent_level, tag_name);  
 }
 
 static void DJL_xml_output_exc_ptr_expr(xml_dump_info_p xdi, tree t, int indent_level) {
