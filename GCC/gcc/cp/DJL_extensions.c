@@ -85,6 +85,12 @@ static void DJL_xml_comment_long(xml_dump_info_p xdi, int indent_level, const ch
   fprintf(xdi->file, "-->\n");
 }
 
+static void DJL_xml_print_escaped(xml_dump_info_p xdi,const char *string) {
+  const char *newval = xml_escape_string(string);
+  fprintf(xdi->file,newval);
+  free(newval);
+}
+
 static void DJL_xml_output_tree_chain(xml_dump_info_p xdi, tree t, int indent_level,
                                       const char *tag_name_element,
                                       const char *tag_name_purpose,
@@ -111,7 +117,7 @@ static void DJL_xml_output_single_child_node(xml_dump_info_p xdi, tree t, int in
 }
 
 /* gcc helper stuff */
-static char *DJL_gcc_get_decl_name(tree t) {
+static char *DJL_gcc_get_decl_name_unescaped(tree t) {
   char *rc = "";
   tree dn = NULL; 
   if(t) dn = DECL_NAME(t);
@@ -123,6 +129,11 @@ static char *DJL_gcc_get_decl_name(tree t) {
     rc = IDENTIFIER_POINTER(dn);
   }
   return rc;
+}
+
+static void DJL_xml_output_decl_name(xml_dump_info_p xdi,tree t) {
+  char* dn = DJL_gcc_get_decl_name_unescaped(t);
+  DJL_xml_print_escaped(xdi,dn);
 }
 
 /* for simple tags without attributes */
@@ -429,8 +440,10 @@ static void DJL_xml_output_const_decl(xml_dump_info_p xdi, tree t, int indent_le
   char *tag_name = "Const_Decl";
   int id = xml_add_node(xdi, t, 1);
   DJL_xml_indent(xdi, indent_level++);
-  fprintf(xdi->file, "<%s:%s id=\"_%d\" name=\"%s\">\n",
-    DJL_xml_ns, tag_name, id, DJL_gcc_get_decl_name(t));
+  fprintf(xdi->file, "<%s:%s id=\"_%d\" name=\"",
+    DJL_xml_ns, tag_name, id);
+  DJL_xml_output_decl_name(xdi,t);
+  fprintf(xdi->file, "\">\n");
   DJL_xml_output_integer_cst(xdi, DECL_INITIAL(t), indent_level);
   DJL_xml_close_tag(xdi, --indent_level, tag_name);
 }
@@ -457,8 +470,10 @@ static void DJL_xml_output_continue_stmt(xml_dump_info_p xdi, tree t, int indent
 static void DJL_xml_output_convert_expr(xml_dump_info_p xdi, tree t, int indent_level) {
   char *tag_name = "Convert_Expr";
   DJL_xml_indent(xdi, indent_level++);
-  fprintf(xdi->file, "<%s:%s precision=\"%d\" type=\"%s\">\n",
-    DJL_xml_ns, tag_name, TYPE_PRECISION (TREE_TYPE (t)), DJL_gcc_get_decl_name(TYPE_NAME(TREE_TYPE(t))));
+  fprintf(xdi->file, "<%s:%s precision=\"%d\" type=\"",
+    DJL_xml_ns, tag_name, TYPE_PRECISION (TREE_TYPE (t)));
+  DJL_xml_output_decl_name(xdi,TYPE_NAME(TREE_TYPE(t)));
+  fprintf(xdi->file, "\">\n");
   //DJL_xml_open_tag(xdi, indent_level++, tag_name);
   DJL_xml_output_expression(xdi, TREE_OPERAND(t, 0), indent_level);
   DJL_xml_close_tag(xdi, --indent_level, tag_name);
@@ -838,8 +853,10 @@ static void DJL_xml_output_field_decl(xml_dump_info_p xdi, tree t, int indent_le
   char *tag_name = "Field_Decl";
   int id = xml_add_node(xdi, t, 1);
   DJL_xml_indent(xdi, indent_level);
-  fprintf(xdi->file, "<%s:%s id=\"_%d\" name=\"%s\" />\n",
-    DJL_xml_ns, tag_name, id, DJL_gcc_get_decl_name(t));
+  fprintf(xdi->file, "<%s:%s id=\"_%d\" name=\"",
+    DJL_xml_ns, tag_name, id);
+  DJL_xml_output_decl_name(xdi,t);
+  fprintf(xdi->file,"\" />\n");
 }
 
 static void DJL_xml_output_fix_trunc_expr(xml_dump_info_p xdi, tree t, int indent_level) {
@@ -890,8 +907,10 @@ static void DJL_xml_output_function_decl(xml_dump_info_p xdi, tree t, int indent
   char *tag_name = "Function_Decl";
   int id = xml_add_node(xdi, t, 1);
   DJL_xml_indent(xdi, indent_level);
-  fprintf(xdi->file, "<%s:%s id=\"_%d\" name=\"%s\" />\n",
-    DJL_xml_ns, tag_name, id, DJL_gcc_get_decl_name(t));
+  fprintf(xdi->file, "<%s:%s id=\"_%d\" name=\"",
+    DJL_xml_ns, tag_name, id);
+  DJL_xml_output_decl_name(xdi,t);
+  fprintf(xdi->file, "\" />\n");
 }
 
 static void DJL_xml_output_ge_expr(xml_dump_info_p xdi, tree t, int indent_level) {
@@ -967,7 +986,9 @@ static void DJL_xml_output_indirect_ref(xml_dump_info_p xdi, tree t, int indent_
     id = xml_add_node(xdi, TYPE_NAME(TREE_TYPE(t)), 1);
     fprintf(xdi->file, "type=\"_%d\" ", id);
   }else{
-    fprintf(xdi->file, "typestring=\"%s\" ", DJL_gcc_get_decl_name(TYPE_NAME(TREE_TYPE(t))));
+    fprintf(xdi->file, "typestring=\"");
+	DJL_xml_output_decl_name(xdi,TYPE_NAME(TREE_TYPE(t)));
+	fprintf(xdi->file, "\" ");
   }
   //This would be nice for all routines...
   //xml_print_location_attribute (xdi, t);
@@ -1107,8 +1128,10 @@ static void DJL_xml_output_namespace_decl(xml_dump_info_p xdi, tree t, int inden
   char *tag_name = "Namespace_Decl";
   int id = xml_add_node(xdi, t, 1);
   DJL_xml_indent(xdi, indent_level);
-  fprintf(xdi->file, "<%s:%s id =\"_%d\" name=\"%s\" />\n",
-    DJL_xml_ns, tag_name, id, DJL_gcc_get_decl_name(t));
+  fprintf(xdi->file, "<%s:%s id =\"_%d\" name=\"",
+    DJL_xml_ns, tag_name, id);
+  DJL_xml_output_decl_name(xdi,t);
+  fprintf(xdi->file, "\" />\n");
 }
 
 static void DJL_xml_output_ne_expr(xml_dump_info_p xdi, tree t, int indent_level) {
@@ -1135,8 +1158,10 @@ static void DJL_xml_output_nop_expr(xml_dump_info_p xdi, tree t, int indent_leve
     DJL_xml_ns, tag_name, id, DJL_gcc_get_decl_name(t));*/
   //DJL_xml_output_single_child_node(xdi, TREE_OPERAND(t, 0), indent_level, tag_name, &DJL_xml_output_expression);
   DJL_xml_indent(xdi, indent_level++);
-  fprintf(xdi->file, "<%s:%s precision=\"%d\" type=\"%s\">\n",
-    DJL_xml_ns, tag_name, TYPE_PRECISION (TREE_TYPE (t)), DJL_gcc_get_decl_name(TYPE_NAME(TREE_TYPE(t))));
+  fprintf(xdi->file, "<%s:%s precision=\"%d\" type=\"",
+    DJL_xml_ns, tag_name, TYPE_PRECISION (TREE_TYPE (t)));
+  DJL_xml_output_decl_name(xdi,TYPE_NAME(TREE_TYPE(t)));
+  fprintf(xdi->file, "\">\n");
   //DJL_xml_open_tag(xdi, indent_level++, tag_name);
   DJL_xml_output_expression(xdi, TREE_OPERAND(t, 0), indent_level);
   DJL_xml_close_tag(xdi, --indent_level, tag_name);
@@ -1153,7 +1178,9 @@ static void DJL_xml_output_ordered_expr(xml_dump_info_p xdi, tree t, int indent_
 static void DJL_xml_output_parm_decl(xml_dump_info_p xdi, tree t, int indent_level) {
   char *tag_name = "Parm_Decl";
   DJL_xml_indent(xdi, indent_level);
-  fprintf(xdi->file, "<%s:%s name=\"%s\" />\n", DJL_xml_ns, tag_name, DJL_gcc_get_decl_name(t));
+  fprintf(xdi->file, "<%s:%s name=\"", DJL_xml_ns, tag_name);
+  DJL_xml_output_decl_name(xdi,t);
+  fprintf(xdi->file, "\" />\n");
 }
 
 static void DJL_xml_output_plus_expr(xml_dump_info_p xdi, tree t, int indent_level) {
@@ -1665,8 +1692,10 @@ static void DJL_xml_output_var_decl(xml_dump_info_p xdi, tree t, int indent_leve
   /*printf("<%s:%s id=\"_%d\" name=\"0x???\" />\n",
     DJL_xml_ns, tag_name, id);*/
   //char * temp = DJL_gcc_get_decl_name(t);
-  fprintf(xdi->file, "<%s:%s id=\"_%d\" name=\"%s\" />\n",
-    DJL_xml_ns, tag_name, id, DJL_gcc_get_decl_name(t));
+  fprintf(xdi->file, "<%s:%s id=\"_%d\" name=\"",
+    DJL_xml_ns, tag_name, id);
+  DJL_xml_output_decl_name(xdi,t);
+  fprintf(xdi->file,"\" />\n");
   //printf("Done with VAR_DECL\n");
 }
 

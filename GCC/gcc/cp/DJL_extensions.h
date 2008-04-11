@@ -65,7 +65,8 @@ void do_xml_dump_body(xml_dump_info_p xdi, tree t, int indent_level);
 void do_xml_dump_expr(xml_dump_info_p xdi, tree t, int indent_level); 
 
 /* gcc helper stuff */
-static char *DJL_gcc_get_decl_name(tree t);
+static char *DJL_gcc_get_decl_name_unescaped(tree t);
+static void DJL_xml_output_decl_name(xml_dump_info_p xdi,tree t);
 static void DJL_xml_output_tree_chain(xml_dump_info_p xdi, tree t, int indent_level,
                                       const char *tag_name_element,
                                       const char *tag_name_purpose,
@@ -79,6 +80,7 @@ static char const *DJL_xml_ns = "body";
 static char const *DJL_xml_ns_uri = "http://www.djlauk.de/";
 static void DJL_xml_indent(xml_dump_info_p xdi, int indent_level);
 static void DJL_xml_comment(xml_dump_info_p xdi, int indent_level, const char *comment);
+static void DJL_xml_print_escaped(xml_dump_info_p xdi,const char *string);
 /* for simple tags without attributes */
 static void DJL_xml_open_tag(xml_dump_info_p xdi, int indent_level, const char *tag_name);
 static void DJL_xml_close_tag(xml_dump_info_p xdi, int indent_level, const char *tag_name);

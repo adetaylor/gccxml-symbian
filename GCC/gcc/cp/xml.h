@@ -233,6 +233,6 @@ static void xml_add_start_nodes PARAMS((xml_dump_info_p, const char*));
 static const char* xml_get_encoded_string PARAMS ((tree));
 static const char* xml_get_encoded_string_from_string PARAMS ((const char*));
 static tree xml_get_encoded_identifier_from_string PARAMS ((const char*));
-static const char* xml_escape_string PARAMS ((const char* in_str));
+const char* xml_escape_string PARAMS ((const char* in_str));
 static int xml_fill_all_decls(struct cpp_reader*, hashnode, const void*);
 #endif
