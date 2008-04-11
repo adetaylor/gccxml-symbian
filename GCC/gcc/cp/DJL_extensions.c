@@ -113,16 +113,16 @@ static void DJL_xml_output_single_child_node(xml_dump_info_p xdi, tree t, int in
 /* gcc helper stuff */
 static char *DJL_gcc_get_decl_name(tree t) {
   char *rc = "";
-  char *dn = NULL; 
+  tree dn = NULL; 
   if(t) dn = DECL_NAME(t);
   //printf("Got past DECL_NAME\n");
   //printf("DECL_NAME = %s(0x%08X)\n", dn, dn);
   if(dn){
     //char *ip = IDENTIFIER_POINTER(dn);
     //return IDENTIFIER_POINTER(DECL_NAME(t));
-    return IDENTIFIER_POINTER(dn);
-  }else
-    return rc;
+    rc = IDENTIFIER_POINTER(dn);
+  }
+  return rc;
 }
 
 /* for simple tags without attributes */
