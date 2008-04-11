@@ -241,9 +241,9 @@ static void DJL_xml_output_asm_expr(xml_dump_info_p xdi, tree t, int indent_leve
   DJL_xml_indent(xdi, indent_level++);
   fprintf(xdi->file, "<%s:%s volatile=\"%d\">", DJL_xml_ns, tag_name, is_volatile);
   DJL_xml_output_single_child_node(xdi, ASM_STRING(t), indent_level, "Asm_String", &DJL_xml_output_string_cst);
-  if (ASM_OUTPUTS(t)) DJL_xml_output_single_child_node(xdi, ASM_OUTPUTS(t), indent_level, "Asm_Outputs", &DJL_xml_output_string_cst);
-  if (ASM_INPUTS(t)) DJL_xml_output_single_child_node(xdi, ASM_INPUTS(t), indent_level, "Asm_Inputs", &DJL_xml_output_string_cst);
-  if (ASM_CLOBBERS(t)) DJL_xml_output_single_child_node(xdi, ASM_CLOBBERS(t), indent_level, "Asm_Clobbers", &DJL_xml_output_string_cst);
+  if (ASM_OUTPUTS(t)) DJL_xml_output_single_child_node(xdi, ASM_OUTPUTS(t), indent_level, "Asm_Outputs", &DJL_xml_output_expression);
+  if (ASM_INPUTS(t)) DJL_xml_output_single_child_node(xdi, ASM_INPUTS(t), indent_level, "Asm_Inputs", &DJL_xml_output_expression);
+  if (ASM_CLOBBERS(t)) DJL_xml_output_single_child_node(xdi, ASM_CLOBBERS(t), indent_level, "Asm_Clobbers", &DJL_xml_output_expression);
   DJL_xml_close_tag(xdi, --indent_level, tag_name);
 }
 
