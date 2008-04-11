@@ -1380,7 +1380,8 @@ void escape(char *result, const char *data, size_t len)
     int index=0;  
     while (len-- > 0) {
         ch = *UCHAR(data++);
-        if (isascii(ch)) {
+        /* Standard ANSI naming convention is __isascii for some reason */
+        if (__isascii(ch)) {
             if (isprint(ch)) {
                 if (ch == '\\')
                     result[index++] = ch;
