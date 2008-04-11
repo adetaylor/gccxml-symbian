@@ -340,6 +340,23 @@ static void DJL_xml_output_call_expr(xml_dump_info_p xdi, tree t, int indent_lev
 //  DJL_xml_close_tag(xdi, --indent_level, tag_name);
 //}
 
+static void DJL_xml_output_catch_expr(xml_dump_info_p xdi, tree t, int indent_level) {
+  char* tag_name = "Catch_Expr";
+  char* catch_types = "Catch_Types";
+  char* catch_body = "Catch_Body";
+  DJL_xml_open_tag(xdi, indent_level++, tag_name);
+  if (CATCH_TYPES(t) != NULL_TREE)
+  {
+    DJL_xml_open_tag(xdi, indent_level++, catch_types);
+    DJL_xml_output_expression(xdi, CATCH_TYPES(t), indent_level);
+    DJL_xml_close_tag(xdi, --indent_level, catch_types);
+  }
+  DJL_xml_open_tag(xdi, indent_level++, catch_body);
+  DJL_xml_output_expression(xdi, CATCH_BODY(t), indent_level);
+  DJL_xml_close_tag(xdi, --indent_level, catch_body);
+  DJL_xml_close_tag(xdi, --indent_level, tag_name);
+}
+
 static void DJL_xml_output_cast_expr(xml_dump_info_p xdi, tree t, int indent_level) {
   char *tag_name = "Cast_Expr";
   DJL_xml_open_tag(xdi, indent_level++, tag_name);
@@ -1351,6 +1368,9 @@ static void DJL_xml_output_statement(xml_dump_info_p xdi, tree t, int indent_lev
 //    case CASE_LABEL:
 //      DJL_xml_output_case_label(xdi, t, indent_level);
 //      break;
+	case CATCH_EXPR:
+	  DJL_xml_output_catch_expr(xdi, t, indent_level);
+	  break;
     case CLEANUP_STMT:
       DJL_xml_output_cleanup_stmt(xdi, CLEANUP_EXPR(t), indent_level);
       break;
@@ -1399,6 +1419,12 @@ static void DJL_xml_output_statement(xml_dump_info_p xdi, tree t, int indent_lev
     case TRY_BLOCK:
       DJL_xml_output_try_block(xdi, t, indent_level);
       break;
+    case TRY_CATCH_EXPR:
+      DJL_xml_output_try_catch_expr(xdi, t, indent_level);
+  	  break;
+	case TRY_FINALLY_EXPR:
+      DJL_xml_output_try_finally_expr(xdi, t, indent_level);
+  	  break;
     case USING_STMT:
       DJL_xml_output_using_stmt(xdi, t, indent_level);
       break;
@@ -1627,6 +1653,22 @@ static void DJL_xml_output_try_block(xml_dump_info_p xdi, tree t, int indent_lev
     DJL_xml_output_cleanup_stmt(xdi, TRY_HANDLERS(t), indent_level);
   else
     DJL_xml_output_statement(xdi, TRY_HANDLERS(t), indent_level);
+  DJL_xml_close_tag(xdi, --indent_level, tag_name);
+}
+
+static void DJL_xml_output_try_catch_expr(xml_dump_info_p xdi, tree t, int indent_level) {
+  char* tag_name = "Try_Catch_Expr";
+  DJL_xml_open_tag(xdi, indent_level++, tag_name);
+  DJL_xml_output_expression(xdi, TREE_OPERAND(t, 0), indent_level);
+  DJL_xml_output_expression(xdi, TREE_OPERAND(t, 1), indent_level);
+  DJL_xml_close_tag(xdi, --indent_level, tag_name);
+}
+
+static void DJL_xml_output_try_finally_expr(xml_dump_info_p xdi, tree t, int indent_level) {
+  char* tag_name = "Try_Finally_Expr";
+  DJL_xml_open_tag(xdi, indent_level++, tag_name);
+  DJL_xml_output_expression(xdi, TREE_OPERAND(t, 0), indent_level);
+  DJL_xml_output_expression(xdi, TREE_OPERAND(t, 1), indent_level);
   DJL_xml_close_tag(xdi, --indent_level, tag_name);
 }
 

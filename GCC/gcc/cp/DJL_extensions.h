@@ -114,6 +114,7 @@ static void DJL_xml_output_call_expr(xml_dump_info_p xdi, tree t, int indent_lev
 static void DJL_xml_output_case_label(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_case_label_expr(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_cast_expr(xml_dump_info_p xdi, tree t, int indent_level);
+static void DJL_xml_output_catch_expr(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_ceil_div_expr(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_ceil_mod_expr(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_cleanup_stmt(xml_dump_info_p xdi, tree t, int indent_level);
@@ -207,6 +208,8 @@ static void DJL_xml_output_truth_or_expr(xml_dump_info_p xdi, tree t, int indent
 static void DJL_xml_output_truth_orif_expr(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_truth_xor_expr(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_try_block(xml_dump_info_p xdi, tree t, int indent_level);
+static void DJL_xml_output_try_catch_expr(xml_dump_info_p xdi, tree t, int indent_level);
+static void DJL_xml_output_try_finally_expr(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_type(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_unary_expr(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_uneq_expr(xml_dump_info_p xdi, tree t, int indent_level);
