@@ -1526,7 +1526,7 @@ static void DJL_xml_output_switch_stmt(xml_dump_info_p xdi, tree t, int indent_l
   char *tag_name = "Switch_Stmt";
   tree lbls;
 //#define SWITCH_LABELS(NODE)     TREE_OPERAND (SWITCH_EXPR_CHECK (NODE), 2)/
-  DJL_xml_open_tag(xdi, indent_level++, tag_name);
+  DJL_xml_open_tag_with_location(xdi, indent_level++, tag_name, t);
   DJL_xml_output_condition(xdi, SWITCH_COND(t), indent_level);
   DJL_xml_output_body(xdi, SWITCH_BODY(t), indent_level);
 //  DJL_xml_output_body(xdi, SWITCH_LABELSY(t), indent_level);
