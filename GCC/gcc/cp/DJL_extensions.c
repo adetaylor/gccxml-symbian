@@ -136,6 +136,14 @@ static void DJL_xml_output_decl_name(xml_dump_info_p xdi,tree t) {
   DJL_xml_print_escaped(xdi,dn);
 }
 
+static void DJL_xml_output_expr_location_attribute(xml_dump_info_p xdi, tree t) {
+  unsigned int source_file = xml_queue_file (xdi, EXPR_FILENAME (t));
+  unsigned int source_line = EXPR_LINENO (t);
+
+  fprintf (xdi->file, " location=\"f%d:%d\" file=\"f%d\" line=\"%d\"",
+           source_file, source_line, source_file, source_line);
+}
+
 /* for simple tags without attributes */
 static void DJL_xml_open_tag(xml_dump_info_p xdi, int indent_level, const char *tag_name) {
   DJL_xml_indent(xdi, indent_level);
@@ -153,6 +161,15 @@ static void DJL_xml_close_tag(xml_dump_info_p xdi, int indent_level, const char 
 static void DJL_xml_empty_tag(xml_dump_info_p xdi, int indent_level, const char *tag_name) {
   DJL_xml_indent(xdi, indent_level);
   fprintf(xdi->file, "<%s:%s />\n", DJL_xml_ns, tag_name);
+}
+
+/* for tags with location attributes but no other attributes */
+static void DJL_xml_open_tag_with_location(xml_dump_info_p xdi, int indent_level, const char *tag_name, tree t) {
+  DJL_xml_indent(xdi, indent_level);
+  fprintf(xdi->file, "<%s:%s ", DJL_xml_ns, tag_name);
+  if (EXPR_HAS_LOCATION(t))
+    DJL_xml_output_expr_location_attribute (xdi, t);
+  fprintf(xdi->file, ">\n");
 }
 
 /* -------------------------------------------------------------------------- */
@@ -296,7 +313,7 @@ static void DJL_xml_output_break_stmt(xml_dump_info_p xdi, tree t, int indent_le
 
 static void DJL_xml_output_call_expr(xml_dump_info_p xdi, tree t, int indent_level) {
   char *tag_name = "Call_Expr";
-  DJL_xml_open_tag(xdi, indent_level++, tag_name);
+  DJL_xml_open_tag_with_location(xdi, indent_level++, tag_name, t);
   /* operand 0: pointer to function to call */
   DJL_xml_output_single_child_node(xdi, TREE_OPERAND(t, 0), indent_level, "Address", &DJL_xml_output_expression);
   /* operand 1: arguments, a TREE_LIST */
@@ -402,7 +419,7 @@ static void DJL_xml_output_compound_literal_expr(xml_dump_info_p xdi, tree t, in
 static void DJL_xml_output_statement_list(xml_dump_info_p xdi, tree t, int indent_level) {
   char *tag_name = "Statement_List";
   tree_stmt_iterator ll;
-  DJL_xml_open_tag(xdi, indent_level++, tag_name);
+  DJL_xml_open_tag_with_location(xdi, indent_level++, tag_name,t);
   //Here we get the head of the ll
   ll=tsi_start(t); 
   while(!tsi_end_p(ll)){
@@ -419,7 +436,7 @@ static void DJL_xml_output_statement_list(xml_dump_info_p xdi, tree t, int inden
 
 static void DJL_xml_output_cond_expr(xml_dump_info_p xdi, tree t, int indent_level) {
   char *tag_name = "Cond_Expr";
-  DJL_xml_open_tag(xdi, indent_level++, tag_name);
+  DJL_xml_open_tag_with_location(xdi, indent_level++, tag_name, t);
   DJL_xml_output_expression(xdi, TREE_OPERAND(t, 0), indent_level);
   DJL_xml_output_expression(xdi, TREE_OPERAND(t, 1), indent_level);
   DJL_xml_output_expression(xdi, TREE_OPERAND(t, 2), indent_level);

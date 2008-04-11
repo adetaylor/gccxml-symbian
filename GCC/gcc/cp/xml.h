@@ -227,6 +227,7 @@ static void xml_dump PARAMS((xml_dump_info_p));
 static int xml_queue_incomplete_dump_nodes PARAMS((splay_tree_node, void*));
 static void xml_dump_tree_node PARAMS((xml_dump_info_p, tree, xml_dump_node_p));
 static void xml_dump_files PARAMS((xml_dump_info_p));
+unsigned int xml_queue_file (xml_dump_info_p xdi, const char* filename);
 
 static void xml_add_start_nodes PARAMS((xml_dump_info_p, const char*));
 

@@ -349,7 +349,7 @@ xml_dump (xml_dump_info_p xdi)
 /* Queue a filename for later output.  If the file has already been
    queued, it is not queued again.  In either case, the queue index
    assigned to the file is returned.  */
-static unsigned int
+unsigned int
 xml_queue_file (xml_dump_info_p xdi, const char* filename)
 {
   tree t = xml_get_encoded_identifier_from_string (filename);
