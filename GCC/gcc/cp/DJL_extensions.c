@@ -1407,42 +1407,40 @@ void escape(char *result, const char *data, size_t len)
     int index=0;  
     while (len-- > 0) {
         ch = *UCHAR(data++);
-        if (isascii(ch)) {
-            if (isprint(ch)) {
-                if (ch == '\\')
-                    result[index++] = ch;
+        if (isprint(ch)) {
+            if (ch == '\\')
                 result[index++] = ch;
-                //VSTRING_ADDCH(result, ch);
-                continue;
-            } else if (ch == '\a') {            /* \a -> audible bell */
-                result[index++] = '\\';
-                result[index++] = 'a';
-                continue;
-            } else if (ch == '\b') {            /* \b -> backspace */
-                result[index++] = '\\';
-                result[index++] = 'b';
-                continue;
-            } else if (ch == '\f') {            /* \f -> formfeed */
-                result[index++] = '\\';
-                result[index++] = 'f';
-                continue;
-            } else if (ch == '\n') {            /* \n -> newline */
-                result[index++] = '\\';
-                result[index++] = 'n';
-                continue;
-            } else if (ch == '\r') {            /* \r -> carriagereturn */
-                result[index++] = '\\';
-                result[index++] = 'r';
-                continue;
-            } else if (ch == '\t') {            /* \t -> horizontal tab */
-                result[index++] = '\\';
-                result[index++] = 't';
-                continue;
-            } else if (ch == '\v') {            /* \v -> vertical tab */
-                result[index++] = '\\';
-                result[index++] = 'v';
-                continue;
-            }
+            result[index++] = ch;
+            //VSTRING_ADDCH(result, ch);
+            continue;
+        } else if (ch == '\a') {            /* \a -> audible bell */
+            result[index++] = '\\';
+            result[index++] = 'a';
+            continue;
+        } else if (ch == '\b') {            /* \b -> backspace */
+            result[index++] = '\\';
+            result[index++] = 'b';
+            continue;
+        } else if (ch == '\f') {            /* \f -> formfeed */
+            result[index++] = '\\';
+            result[index++] = 'f';
+            continue;
+        } else if (ch == '\n') {            /* \n -> newline */
+            result[index++] = '\\';
+            result[index++] = 'n';
+            continue;
+        } else if (ch == '\r') {            /* \r -> carriagereturn */
+            result[index++] = '\\';
+            result[index++] = 'r';
+            continue;
+        } else if (ch == '\t') {            /* \t -> horizontal tab */
+            result[index++] = '\\';
+            result[index++] = 't';
+            continue;
+        } else if (ch == '\v') {            /* \v -> vertical tab */
+            result[index++] = '\\';
+            result[index++] = 'v';
+            continue;
         }
         if (isdigit(*UCHAR(data)))
             sprintf(result + index, "\\%03d",ch);
