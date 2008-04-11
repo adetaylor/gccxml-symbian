@@ -858,6 +858,9 @@ static void DJL_xml_output_expression(xml_dump_info_p xdi, tree t, int indent_le
   case CASE_LABEL_EXPR:
     DJL_xml_output_case_label_expr(xdi, t, indent_level);
     break;
+  case EXC_PTR_EXPR:
+    DJL_xml_output_exc_ptr_expr(xdi, t, indent_level);
+    break;
   default:
     //DJL_xml_comment_short(xdi, indent_level, "Unhandled case in DJL_xml_output_expression");
     //DJL_xml_output_(xdi, t, indent_level);
@@ -1531,6 +1534,11 @@ static void DJL_xml_output_case_label_expr(xml_dump_info_p xdi, tree t, int inde
     DJL_xml_output_expression(xdi, CASE_LABEL(t), indent_level);
     DJL_xml_close_tag(xdi, --indent_level, tag_name);
   }  
+}
+
+static void DJL_xml_output_exc_ptr_expr(xml_dump_info_p xdi, tree t, int indent_level) {
+  char* tag_name = "Exc_Ptr_Expr";
+  DJL_xml_empty_tag(xdi, indent_level, tag_name);
 }
 
 static void DJL_xml_output_target_expr(xml_dump_info_p xdi, tree t, int indent_level) {

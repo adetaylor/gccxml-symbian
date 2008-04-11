@@ -135,6 +135,7 @@ static void DJL_xml_output_do_stmt(xml_dump_info_p xdi, tree t, int indent_level
 static void DJL_xml_output_empty_class_expr(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_eq_expr(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_exact_div_expr(xml_dump_info_p xdi, tree t, int indent_level);
+static void DJL_xml_output_exc_ptr_expr(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_exit_expr(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_expr_stmt(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_expression(xml_dump_info_p xdi, tree t, int indent_level);
