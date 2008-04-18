@@ -1504,20 +1504,13 @@ static void DJL_xml_output_string_cst(xml_dump_info_p xdi, tree t, int indent_le
   int i,j=0;
 
   strncpy(val, TREE_STRING_POINTER(t), TREE_STRING_LENGTH(t));
-  escape(newval, val, TREE_STRING_LENGTH(t));
-  /*for(i=0;i<TREE_STRING_LENGTH(t);i++){
-    char next = val[i];
-    newval[j++] = next;
-    printf("Processing %c(%d)\n", next,next);
-    if(next == '\\'){
-      newval[j++]= next;
-      printf("Worked Around Escape!!\n");
-    }
-  }*/
 
   DJL_xml_indent(xdi, indent_level);
-  fprintf(xdi->file, "<%s:%s>%s</%s:%s>\n",
-    DJL_xml_ns, tag_name, newval, DJL_xml_ns, tag_name);
+  fprintf(xdi->file, "<%s:%s>",
+    DJL_xml_ns, tag_name);
+  DJL_xml_print_escaped(xdi,val);
+  fprintf(xdi->file, "</%s:%s>\n",
+    DJL_xml_ns, tag_name);
   free(val); val = NULL;
 }
 
