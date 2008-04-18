@@ -41,7 +41,7 @@ ADD_EXECUTABLE(gccxml_cc1plus
   ../dummy-checksum.c ../main.c
 
   xml.c
-  DJL_Extensions.c
+  DJL_extensions.c
   )
 
 TARGET_LINK_LIBRARIES(gccxml_cc1plus backend cpp decnumber iberty)
