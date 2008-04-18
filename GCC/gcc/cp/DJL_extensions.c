@@ -1495,8 +1495,6 @@ void escape(char *result, const char *data, size_t len)
     result[index] = 0;
 }
 static void DJL_xml_output_string_cst(xml_dump_info_p xdi, tree t, int indent_level) {
-/* use strncpy, because the string, which TREE_TSRING_POINTER points at
-   may not be \0 terminated */
   char *tag_name = "String_Cst";
   //FIXME - WPM - There is something wrong with the way this handles inline assembly - FIXME
   char *val = (char *)xcalloc(TREE_STRING_LENGTH(t) + 1, sizeof(char));
@@ -1504,6 +1502,11 @@ static void DJL_xml_output_string_cst(xml_dump_info_p xdi, tree t, int indent_le
   int i,j=0;
 
   strncpy(val, TREE_STRING_POINTER(t), TREE_STRING_LENGTH(t));
+  /* Known bug here - strings containing a null character (\0) will be truncated.
+     We really ought to use memcpy. But even then, the DJL_xml_print_escaped function
+     won't cope with \0 characters.
+     This is a surprisingly common problem because for wide strings every other byte
+     will often be 0, so only the first character will be printed. */
 
   DJL_xml_indent(xdi, indent_level);
   fprintf(xdi->file, "<%s:%s>",
