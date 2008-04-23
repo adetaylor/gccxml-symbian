@@ -1511,7 +1511,12 @@ static void DJL_xml_output_string_cst(xml_dump_info_p xdi, tree t, int indent_le
   DJL_xml_indent(xdi, indent_level);
   fprintf(xdi->file, "<%s:%s>",
     DJL_xml_ns, tag_name);
-  DJL_xml_print_escaped(xdi,val);
+  /* And another bug here. It turns out that the escaping code doesn't escape non-ASCII
+     characters which are sometimes found in strings. So that produces invalid XML.
+	 Hence temporarily disabling the output of the actual string. 
+	 To be reinstated when I have time to fix the algorithm. */
+  /* DJL_xml_print_escaped(xdi,val); */
+  /* End of disablement */
   fprintf(xdi->file, "</%s:%s>\n",
     DJL_xml_ns, tag_name);
   free(val); val = NULL;
