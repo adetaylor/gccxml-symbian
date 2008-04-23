@@ -37,6 +37,9 @@ Common
 -version
 Common
 
+bi
+Common
+
 G
 Common Joined Separate UInteger
 -G<number>	Put global and static data smaller than <number> bytes into a special section (on some targets)

@@ -1019,6 +1019,11 @@ common_handle_option (size_t scode, const char *arg, int value,
       /* These are no-ops, preserved for backward compatibility.  */
       break;
 
+    case OPT_bi:
+      /* This is a no-op preserved for compatibility with some Symbian
+       * OS toolchain scripts. Macrobug special hack. */
+	  break;
+
     default:
       /* If the flag was handled in a standard way, assume the lack of
          processing here is intentional.  */

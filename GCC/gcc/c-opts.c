@@ -258,6 +258,10 @@ c_common_init_options (unsigned int argc, const char **argv)
 #endif
     }
 
+  /* Macrobug hack. Always set permissive mode to avoid
+     failing with insufficiently strict Symbian header files. */
+  flag_permissive = 1;
+
   return result;
 }
 
