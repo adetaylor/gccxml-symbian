@@ -2127,9 +2127,13 @@ xml_document_add_element_record_type (xml_document_info_p xdi,
 static void
 xml_output_fundamental_type (xml_dump_info_p xdi, tree t, xml_dump_node_p dn)
 {
+  tree tn;
   fprintf (xdi->file, "  <FundamentalType");
   xml_print_id_attribute (xdi, dn);
-  xml_print_name_attribute (xdi, DECL_NAME (TYPE_NAME (t)));
+  tn = TYPE_NAME(t);
+  /* Some fundamental types don't have names. Odd but true. */
+  if (tn != NULL)
+	  xml_print_name_attribute (xdi, DECL_NAME (tn));
   xml_print_attributes_attribute (xdi, TYPE_ATTRIBUTES(t), 0);
   xml_print_size_attribute (xdi, t);
   xml_print_align_attribute (xdi, t);
