@@ -754,6 +754,9 @@ static void DJL_xml_output_expression(xml_dump_info_p xdi, tree t, int indent_le
   case ORDERED_EXPR:
     DJL_xml_output_ordered_expr(xdi, t, indent_level);
     break;
+  case OBJ_TYPE_REF:
+    DJL_xml_output_obj_type_ref(xdi, t, indent_level);
+	break;
   case PLUS_EXPR:
     DJL_xml_output_plus_expr(xdi, t, indent_level);
     break;
@@ -1200,6 +1203,24 @@ static void DJL_xml_output_nop_expr(xml_dump_info_p xdi, tree t, int indent_leve
   fprintf(xdi->file, "\">\n");
   //DJL_xml_open_tag(xdi, indent_level++, tag_name);
   DJL_xml_output_expression(xdi, TREE_OPERAND(t, 0), indent_level);
+  DJL_xml_close_tag(xdi, --indent_level, tag_name);
+}
+
+static void DJL_xml_output_obj_type_ref(xml_dump_info_p xdi, tree t, int indent_level) {
+  char *tag_name = "Obj_Type_Ref";
+  char *expr_tag_name = "Obj_Type_Ref_Expr";
+  char *obj_tag_name = "Obj_Type_Ref_Object";
+  char *token_tag_name = "Obj_Type_Ref_Token";
+  DJL_xml_open_tag(xdi, indent_level++, tag_name);
+  DJL_xml_open_tag(xdi, indent_level++, expr_tag_name);
+  DJL_xml_output_expression(xdi, OBJ_TYPE_REF_EXPR(t), indent_level);
+  DJL_xml_close_tag(xdi, --indent_level, expr_tag_name);
+  DJL_xml_open_tag(xdi, indent_level++, obj_tag_name);
+  DJL_xml_output_expression(xdi, OBJ_TYPE_REF_OBJECT(t), indent_level);
+  DJL_xml_close_tag(xdi, --indent_level, obj_tag_name);
+  DJL_xml_open_tag(xdi, indent_level++, token_tag_name);
+  DJL_xml_output_expression(xdi, OBJ_TYPE_REF_TOKEN(t), indent_level);
+  DJL_xml_close_tag(xdi, --indent_level, token_tag_name);
   DJL_xml_close_tag(xdi, --indent_level, tag_name);
 }
 

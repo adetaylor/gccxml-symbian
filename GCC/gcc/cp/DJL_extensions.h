@@ -174,6 +174,7 @@ static void DJL_xml_output_ne_expr(xml_dump_info_p xdi, tree t, int indent_level
 static void DJL_xml_output_negate_expr(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_non_lvalue_expr(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_nop_expr(xml_dump_info_p xdi, tree t, int indent_level);
+static void DJL_xml_output_obj_type_ref(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_ordered_expr(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_parm_decl(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_plus_expr(xml_dump_info_p xdi, tree t, int indent_level);
