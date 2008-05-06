@@ -1206,11 +1206,17 @@ static void DJL_xml_output_nop_expr(xml_dump_info_p xdi, tree t, int indent_leve
   DJL_xml_close_tag(xdi, --indent_level, tag_name);
 }
 
+/* A virtual function call */
 static void DJL_xml_output_obj_type_ref(xml_dump_info_p xdi, tree t, int indent_level) {
   char *tag_name = "Obj_Type_Ref";
   char *expr_tag_name = "Obj_Type_Ref_Expr";
   char *obj_tag_name = "Obj_Type_Ref_Object";
   char *token_tag_name = "Obj_Type_Ref_Token";
+  char *resolved_function_tag_name = "Resolved_Function";
+  tree obj_type;
+  int index;
+  tree fun;
+
   DJL_xml_open_tag(xdi, indent_level++, tag_name);
   DJL_xml_open_tag(xdi, indent_level++, expr_tag_name);
   DJL_xml_output_expression(xdi, OBJ_TYPE_REF_EXPR(t), indent_level);
@@ -1221,6 +1227,35 @@ static void DJL_xml_output_obj_type_ref(xml_dump_info_p xdi, tree t, int indent_
   DJL_xml_open_tag(xdi, indent_level++, token_tag_name);
   DJL_xml_output_expression(xdi, OBJ_TYPE_REF_TOKEN(t), indent_level);
   DJL_xml_close_tag(xdi, --indent_level, token_tag_name);
+  DJL_xml_open_tag(xdi, indent_level++, resolved_function_tag_name);
+
+  /* The following code resolves the vtable offsets into
+   * an actual function. It will be similar to the function
+   * which is actually called by the code, although that
+   * of course depends upon the runtime contents of the
+   * pointer on which we're calling this virtual function.
+   * The reason we dump this is that it's virtually (!)
+   * impossible to work out the function being called from
+   * the rest of the information dumped here (i.e.
+   * the vtable offset and the other things we have).
+   * Doing so involves working out what function GCC has
+   * stuffed into which vtable position, which isn't
+   * recorded elsewhere in the XML. It also involves lots
+   * of GCC rules and is therefore likely to be inaccurate.
+   * So, we use GCC's internal mechanisms to resolve
+   * the function in question accurately.
+   * The code itself comes from
+   * resolve_virtual_fun_from_obj_type_ref(...)
+   * which is used by the tree pretty-printer elsewhere
+   * in the GCC source. */
+  obj_type = TREE_TYPE (OBJ_TYPE_REF_OBJECT (t));
+  index = tree_low_cst (OBJ_TYPE_REF_TOKEN (t), 1);
+  fun = BINFO_VIRTUALS (TYPE_BINFO (TREE_TYPE (obj_type)));
+    while (index--)
+      fun = TREE_CHAIN (fun);
+
+  DJL_xml_output_expression(xdi, BV_FN(fun), indent_level);
+  DJL_xml_close_tag(xdi, --indent_level, resolved_function_tag_name);
   DJL_xml_close_tag(xdi, --indent_level, tag_name);
 }
 
