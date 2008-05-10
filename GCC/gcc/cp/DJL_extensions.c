@@ -44,13 +44,14 @@ have a look at "DJL_extensions.h". */
 #endif
 #include "real.h"
 
+#include "Body_Version.h"
 
 /* your entry point to this module */
 void do_xml_dump_body(xml_dump_info_p xdi, tree t, int indent_level) {
   char *tag_name = "Dump";
   DJL_xml_indent(xdi, indent_level++);
-  fprintf(xdi->file, "<%s:%s xmlns:%s=\"%s\">\n",
-    DJL_xml_ns, tag_name, DJL_xml_ns, DJL_xml_ns_uri);
+  fprintf(xdi->file, "<%s:%s xmlns:%s=\"%s\" version=\"%s\">\n",
+    DJL_xml_ns, tag_name, DJL_xml_ns, DJL_xml_ns_uri,DJL_xml_body_version);
   DJL_xml_output_body(xdi, t, indent_level);
   DJL_xml_close_tag(xdi, --indent_level, tag_name);
 }
@@ -60,8 +61,8 @@ void do_xml_dump_expr(xml_dump_info_p xdi, tree t, int indent_level) {
   if (!t || (t == error_mark_node)) return;
   if (TREE_CODE (t) == CONSTRUCTOR) return; //FIXME - This may be needed for c++
   DJL_xml_indent(xdi, indent_level++);
-  fprintf(xdi->file, "<%s:%s xmlns:%s=\"%s\">\n",
-    DJL_xml_ns, tag_name, DJL_xml_ns, DJL_xml_ns_uri);
+  fprintf(xdi->file, "<%s:%s xmlns:%s=\"%s\" version=\"%s\">\n",
+    DJL_xml_ns, tag_name, DJL_xml_ns, DJL_xml_ns_uri,DJL_xml_body_version);
   
   DJL_xml_output_expression(xdi, t, indent_level);
   DJL_xml_close_tag(xdi, --indent_level, tag_name);
