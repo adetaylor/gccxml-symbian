@@ -1023,8 +1023,10 @@ static void DJL_xml_output_indirect_ref(xml_dump_info_p xdi, tree t, int indent_
   fprintf(xdi->file, "<%s:%s ", 
     DJL_xml_ns, tag_name);
   if(TREE_CODE(TREE_TYPE(t)) == RECORD_TYPE){
-    id = xml_add_node(xdi, TYPE_NAME(TREE_TYPE(t)), 1);
-    fprintf(xdi->file, "type=\"_%d\" ", id);
+	if (TYPE_NAME(TREE_TYPE(t)) != NULL) {
+      id = xml_add_node(xdi, TYPE_NAME(TREE_TYPE(t)), 1);
+      fprintf(xdi->file, "type=\"_%d\" ", id);
+	}
   }else{
     fprintf(xdi->file, "typestring=\"");
 	DJL_xml_output_decl_name(xdi,TYPE_NAME(TREE_TYPE(t)));
