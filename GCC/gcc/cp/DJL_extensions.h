@@ -162,6 +162,7 @@ static void DJL_xml_output_label_decl(xml_dump_info_p xdi, tree t, int indent_le
 static void DJL_xml_output_label_stmt(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_le_expr(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_loop_expr(xml_dump_info_p xdi, tree t, int indent_level);
+static void DJL_xml_output_lrotate_expr(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_lshift_expr(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_lt_expr(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_max_expr(xml_dump_info_p xdi, tree t, int indent_level);
@@ -191,6 +192,7 @@ static void DJL_xml_output_result_decl(xml_dump_info_p xdi, tree t, int indent_l
 static void DJL_xml_output_return_expr(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_round_div_expr(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_round_mod_expr(xml_dump_info_p xdi, tree t, int indent_level);
+static void DJL_xml_output_rrotate_expr(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_rshift_expr(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_save_expr(xml_dump_info_p xdi, tree t, int indent_level);
 static void DJL_xml_output_scope_stmt(xml_dump_info_p xdi, tree t, int *indent_level);

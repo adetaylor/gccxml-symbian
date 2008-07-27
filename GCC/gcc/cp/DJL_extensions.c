@@ -719,6 +719,9 @@ static void DJL_xml_output_expression(xml_dump_info_p xdi, tree t, int indent_le
   case LOOP_EXPR:
     DJL_xml_output_loop_expr(xdi, t, indent_level);
     break;
+  case LROTATE_EXPR:
+    DJL_xml_output_lrotate_expr(xdi, t, indent_level);
+    break;
   case LSHIFT_EXPR:
     DJL_xml_output_lshift_expr(xdi, t, indent_level);
     break;
@@ -784,6 +787,9 @@ static void DJL_xml_output_expression(xml_dump_info_p xdi, tree t, int indent_le
     break;
   case ROUND_MOD_EXPR:
     DJL_xml_output_round_mod_expr(xdi, t, indent_level);
+    break;
+  case RROTATE_EXPR:
+    DJL_xml_output_rrotate_expr(xdi, t, indent_level);
     break;
   case RSHIFT_EXPR:
     DJL_xml_output_rshift_expr(xdi, t, indent_level);
@@ -1110,6 +1116,14 @@ static void DJL_xml_output_loop_expr(xml_dump_info_p xdi, tree t, int indent_lev
   DJL_xml_output_single_child_node(xdi, LOOP_EXPR_BODY(t), indent_level, tag_name, &DJL_xml_output_body);
 }
 
+static void DJL_xml_output_lrotate_expr(xml_dump_info_p xdi, tree t, int indent_level) {
+  char *tag_name = "Lrotate_Expr";
+  DJL_xml_open_tag(xdi, indent_level++, tag_name);
+  DJL_xml_output_expression(xdi, TREE_OPERAND(t, 0), indent_level);
+  DJL_xml_output_expression(xdi, TREE_OPERAND(t, 1), indent_level);
+  DJL_xml_close_tag(xdi, --indent_level, tag_name);
+}
+
 static void DJL_xml_output_lshift_expr(xml_dump_info_p xdi, tree t, int indent_level) {
   char *tag_name = "Lshift_Expr";
   DJL_xml_open_tag(xdi, indent_level++, tag_name);
@@ -1386,6 +1400,14 @@ static void DJL_xml_output_round_div_expr(xml_dump_info_p xdi, tree t, int inden
 
 static void DJL_xml_output_round_mod_expr(xml_dump_info_p xdi, tree t, int indent_level) {
   char *tag_name = "Round_Mod_Expr";
+  DJL_xml_open_tag(xdi, indent_level++, tag_name);
+  DJL_xml_output_expression(xdi, TREE_OPERAND(t, 0), indent_level);
+  DJL_xml_output_expression(xdi, TREE_OPERAND(t, 1), indent_level);
+  DJL_xml_close_tag(xdi, --indent_level, tag_name);
+}
+
+static void DJL_xml_output_rrotate_expr(xml_dump_info_p xdi, tree t, int indent_level) {
+  char *tag_name = "Rrotate_Expr";
   DJL_xml_open_tag(xdi, indent_level++, tag_name);
   DJL_xml_output_expression(xdi, TREE_OPERAND(t, 0), indent_level);
   DJL_xml_output_expression(xdi, TREE_OPERAND(t, 1), indent_level);
